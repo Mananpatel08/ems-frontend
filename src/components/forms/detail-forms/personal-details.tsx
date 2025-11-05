@@ -62,7 +62,7 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({ nextStep, perso
                 refetch?.();
                 setToast({
                     type: "success",
-                    title: "Update Successfully!",
+                    title: "Success!",
                     message: "Personal details updated successfully.",
                 });
             } else {
@@ -224,8 +224,15 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({ nextStep, perso
                             variant="primary"
                             size="md"
                             disabled={isPending || isUpdating}
+                            className={isPending || isUpdating ? "cursor-progress" : ""}
                         >
-                            {personalDetailId ? "Update" : "Continue →"}
+                            {isUpdating
+                                ? "Updating..."
+                                : isPending
+                                    ? "Saving..."
+                                    : personalDetailId
+                                        ? "Update"
+                                        : "Continue →"}
                         </Button>
                         {personalDetailId && (<Button
                             type="submit"

@@ -1,13 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useLogin } from "@/hooks/useAuth";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/context";
+import Checkbox from "../ui/checkbox";
+import { Eye, EyeOff } from "lucide-react";
 
 export const AuthRoot = () => {
     const router = useRouter();
+    const [remember, setRemember] = useState(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
     const { mutateAsync: login, isPending } = useLogin();
     const { setToast } = useToast();
     const {
@@ -17,15 +21,22 @@ export const AuthRoot = () => {
     } = useForm<LoginFormData>({
         mode: "onChange",
         defaultValues: {
-            email: "",
-            password: "",
+            email: localStorage.getItem("rememberedEmail") || "",
+            password: localStorage.getItem("rememberedPassword") || "",
         },
     });
-
+    const togglePassword = () => setShowPassword(prev => !prev);
     const onSubmit = async (data: LoginFormData) => {
         try {
             const response = await login(data);
             localStorage.setItem("access_token", response.data.access);
+            if (remember) {
+                localStorage.setItem("rememberedEmail", data.email);
+                localStorage.setItem("rememberedPassword", data.password);
+            } else {
+                localStorage.removeItem("rememberedEmail");
+                localStorage.removeItem("rememberedPassword");
+            }
             if (response.status) {
                 router.push("/");
             }
@@ -97,20 +108,33 @@ export const AuthRoot = () => {
                                     },
                                 }}
                                 render={({ field }) => (
-                                    <input
-                                        {...field}
-                                        type="password"
-                                        placeholder="••••••••"
-                                        className={`w-full border rounded-md px-3 py-2 text-sm focus:outline-none ${errors.password
-                                            ? "border-red-500"
-                                            : "border-gray-300"
-                                            }`}
-                                    />
+                                    <div className="relative">
+                                        <input
+                                            {...field}
+                                            type={showPassword ? "text" : "password"}
+                                            autoComplete="new-password"
+                                            placeholder="••••••••"
+                                            className={`w-full border rounded-md px-3 pe-10 py-2 text-sm focus:outline-none ${errors.password
+                                                ? "border-red-500"
+                                                : "border-gray-300"
+                                                }`}
+                                        />
+                                        {showPassword ? (
+                                            <Eye onClick={togglePassword} className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-700" />
+                                        ) : (
+                                            <EyeOff onClick={togglePassword} className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-700" />
+                                        )}
+                                    </div>
                                 )}
                             />
                             {errors.password && (
                                 <p className="text-xs text-red-500">{errors.password.message}</p>
                             )}
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <Checkbox setChecked={setRemember} checked={remember} />
+                            <p className="text-blue-500 text-xs hover:underline cursor-pointer">Forgot Password</p>
                         </div>
                     </div>
                     <button
