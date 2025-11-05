@@ -1,0 +1,36 @@
+import FormService from "@/services/formService"
+import { FormDataResponse, PersonalDetailCreatePayload } from "@/types"
+import { useMutation, useQuery } from "@tanstack/react-query"
+
+
+export const useFormById = (id: string) => {
+    return useQuery<FormDataResponse>({
+        queryKey: ["form", id],
+        queryFn: () => new FormService().getForm(id),
+        enabled: Boolean(id),
+    })
+}
+
+export const usePersonalDetails = () => {
+    return useMutation<FormDataResponse, unknown, PersonalDetailCreatePayload>({
+        mutationKey: ["personal-details"],
+        mutationFn: (data: any) =>
+            new FormService().personalDetail(data),
+    })
+}
+
+export const useUpdatePersonalDetails = (id: string) => {
+    return useMutation({
+        mutationKey: ["update-personal-details", id],
+        mutationFn: (data: any) =>
+            new FormService().updatePersonalDetail(id, data),
+    })
+}
+
+export const useServiceDetails = () => {
+    return useMutation({
+        mutationKey: ["service-details"],
+        mutationFn: (data: any) =>
+            new FormService().serviceDetail(data),
+    })
+}

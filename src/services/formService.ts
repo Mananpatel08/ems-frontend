@@ -1,0 +1,30 @@
+import { ApiSuccessResponse, FormDataResponse, PersonalDetail, PersonalDetailCreatePayload, PersonalDetailPayload, ServiceDetailsPayload } from "@/types";
+import apiClient from "./apiClient";
+
+export default class FormService {
+
+    // GET FORM BY ID
+    async getForm(id: string): Promise<FormDataResponse> {
+        const response = await apiClient.get<FormDataResponse>(`/form/${id}/`);
+        return response.data;
+    }
+
+    // CREATE PERSONAL DETAILS STEP
+    async personalDetail(data: PersonalDetailCreatePayload) {
+        const response = await apiClient.post<ApiSuccessResponse<FormDataResponse>>("/form/", data);
+        return response.data.data;
+    }
+
+    // UPDATE PERSONAL DETAILS STEP
+    async updatePersonalDetail(id: string, data: PersonalDetailPayload) {
+        const response = await apiClient.put<PersonalDetail>(`/form/personal-details/${id}/`, data);
+        return response.data;
+    }
+
+    // CREATE SERVICE DETAILS STEP
+    async serviceDetail(data: ServiceDetailsPayload) {
+        const response = await apiClient.post("/form", data);
+        return response.data;
+    }
+
+}
