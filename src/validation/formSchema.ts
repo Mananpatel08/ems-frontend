@@ -13,16 +13,9 @@ export const personalDetailsSchema = Yup.object({
 
 export const serviceDetailsSchema = Yup.object({
   joining_appointment_date: Yup.string().required("Joining date is required"),
-  regular_appointment_date: Yup.string().required("Regular appointment date is required"),
-  post_at_appointment: Yup.string().required("Post is required"),
-  ppan: Yup.string().required("PPAN is required"),
-  pran: Yup.string().required("PRAN is required"),
-  exams: Yup.array().of(
-    Yup.object({
-      exam_type: Yup.string().required("Exam type is required"),
-      passing_date: Yup.string().required("Passing date is required"),
-      attempt_count: Yup.number().required("Attempt count is required")
-    })
-  ).min(1, "At least one exam record required"),
-  root_form_id: Yup.string().uuid("Invalid UUID").required("Root Form ID is required"),
+  post_at_appointment: Yup.string().required("Post at appointment is required"),
+  regular_appointment_date: Yup.string().optional(),
+  ppan: Yup.string().optional(),
+  pran: Yup.string().optional(),
+  exams: Yup.array().of(Yup.object({ exam_type: Yup.string().required(), passing_date: Yup.string().optional(), attempt_count: Yup.number().transform((value, originalValue) => (originalValue === undefined ? undefined : value)).typeError("Attempt count must be a number").when("passing_date", { is: (val: string | undefined) => !!val && val !== "", then: (schema) => schema.required("Please enter attempt count"), otherwise: (schema) => schema.optional(), }), })),
 });

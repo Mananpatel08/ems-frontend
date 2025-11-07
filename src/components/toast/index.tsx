@@ -46,7 +46,7 @@ export function Toast({ type, title, message, onClose }: ToastProps) {
             initial="initial"
             animate="animate"
             exit="exit"
-            className={`flex items-center gap-3 border-[1.5px] rounded-2xl px-3 py-2.5 shadow-sm ${bg} hover:cursor-default`}
+            className={`flex items-center gap-3 border-[0.5px] rounded-2xl px-3 py-2.5 shadow-sm ${bg} hover:cursor-default`}
         >
             <div className={`flex items-center justify-center ${bg}`}>
                 {icon}

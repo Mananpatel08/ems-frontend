@@ -1,6 +1,6 @@
 import { cn } from "@/helpers";
 import { useOutsideClick } from "@/hooks/useOutSideClikDetector";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 
 export interface DropdownOption<T = string> {
   label: string;
@@ -17,6 +17,7 @@ interface CommonDropdownProps<T = string> {
   error?: string;
   className?: string;
   optionClassName?: string;
+  name?: string;
 }
 
 export function CommonDropdown<T = string>({
@@ -29,16 +30,15 @@ export function CommonDropdown<T = string>({
   error,
   className,
   optionClassName,
+  name,
 }: CommonDropdownProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
-  const [internalValue, setInternalValue] = useState<T | undefined>(value);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const selected = options.find((opt) => opt.value === (value ?? internalValue));
+  const selected = options.find((opt) => opt.value === value);
 
   const handleSelect = (val: T) => {
     if (disabled) return;
-    setInternalValue(val);
     onChange?.(val);
     setIsOpen(false);
   };
@@ -48,15 +48,18 @@ export function CommonDropdown<T = string>({
   return (
     <div className={cn("w-full", className)} ref={dropdownRef}>
       {label && (
-        <label className="block mb-1 text-sm font-medium text-gray-700">{label}</label>
+        <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor={name}>
+          {label}
+        </label>
       )}
       <div
+        id={name}
         className={cn(
           "relative rounded-xl border transition cursor-pointer select-none",
           disabled
             ? "bg-gray-100 text-gray-400 cursor-not-allowed"
             : "bg-white hover:border-gray-400 border-gray-300",
-          error && "border-red-500",
+          error && "border-red-500"
         )}
         onClick={() => !disabled && setIsOpen((p) => !p)}
       >
@@ -79,12 +82,20 @@ export function CommonDropdown<T = string>({
         </div>
 
         {isOpen && (
-          <div className={cn("absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-md max-h-48 overflow-auto", optionClassName)}>
+          <div
+            className={cn(
+              "absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-md max-h-48 overflow-auto",
+              optionClassName
+            )}
+          >
             {options.length > 0 ? (
               options.map((opt) => (
                 <div
                   key={String(opt.value)}
-                  onClick={(e) => { e.stopPropagation(); handleSelect(opt.value) }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelect(opt.value);
+                  }}
                   className={cn(
                     "px-4 py-2.5 text-sm hover:bg-blue-50 cursor-pointer",
                     selected?.value === opt.value && "bg-blue-100 font-medium"

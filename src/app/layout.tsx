@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "../style/globals.css";
+import "nprogress/nprogress.css";
 import QueryProvider from "@/providers/QueryProvider";
 import ToastProviderWrapper from "@/providers/ToastProviderWrapper";
+import NProgressWrapper from "./NProgressWrapper";
 
 
 export const metadata: Metadata = {
@@ -19,6 +21,7 @@ export default function RootLayout({
       <body>
         <ToastProviderWrapper>
           <QueryProvider>
+            <NProgressWrapper />
             {children}
           </QueryProvider>
         </ToastProviderWrapper>

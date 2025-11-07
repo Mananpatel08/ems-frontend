@@ -34,3 +34,11 @@ export const useServiceDetails = () => {
             new FormService().serviceDetail(data),
     })
 }
+
+export const useUpdateServiceDetails = (id: string) => {
+    return useMutation({
+        mutationKey: ["update-service-details", id],
+        mutationFn: (data: any) =>
+            new FormService().updateServiceDetail(id, data),
+    })
+}

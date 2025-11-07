@@ -1,16 +1,18 @@
 const exam_types = "pre_service" | "ccc" | "ccc_plus" | "lrq" | "hrq";
 
+type Exam = {
+  exam_type: ExamType;
+  passing_date?: string;
+  attempt_count?: number;
+};
+
 type ServiceDetailsPayload = {
     joining_appointment_date: string;
     regular_appointment_date?: string;
     post_at_appointment: "revenue_clerk" | "revenue_talati" | "deputy_mamlatdar";
     ppan?: string;
     pran?: string;
-    exams?: {
-        exam_type: exam_types;
-        passing_date: string;
-        attempt_count: number;
-    }[];
+    exams?: Exam[];
     root_form_id?: string;
 };
 

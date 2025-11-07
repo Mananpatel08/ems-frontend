@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLogin } from "@/hooks/useAuth";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,7 @@ export const AuthRoot = () => {
     const router = useRouter();
     const [remember, setRemember] = useState(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [defaultValues, setDefaultValues] = useState({ email: "", password: "" });
     const { mutateAsync: login, isPending } = useLogin();
     const { setToast } = useToast();
     const {
@@ -20,10 +21,7 @@ export const AuthRoot = () => {
         formState: { errors, isValid },
     } = useForm<LoginFormData>({
         mode: "onChange",
-        defaultValues: {
-            email: localStorage.getItem("rememberedEmail") || "",
-            password: localStorage.getItem("rememberedPassword") || "",
-        },
+        defaultValues,
     });
     const togglePassword = () => setShowPassword(prev => !prev);
     const onSubmit = async (data: LoginFormData) => {
@@ -50,7 +48,11 @@ export const AuthRoot = () => {
             })
         }
     };
-
+    useEffect(() => {
+        const rememberedEmail = localStorage.getItem("rememberedEmail") || "";
+        const rememberedPassword = localStorage.getItem("rememberedPassword") || "";
+        setDefaultValues({ email: rememberedEmail, password: rememberedPassword });
+    }, []);
 
     return (
         <div className="flex items-center bg-white px-4">

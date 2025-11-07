@@ -27,4 +27,10 @@ export default class FormService {
         return response.data;
     }
 
+    // UPDATE SERVICE DETAILS STEP
+    async updateServiceDetail(id: string, data: ServiceDetailsPayload) {
+        const response = await apiClient.put(`/form/service-details/${id}/`, data);
+        return response.data;
+    }
+
 }
