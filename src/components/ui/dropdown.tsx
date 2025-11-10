@@ -1,5 +1,6 @@
 import { cn } from "@/helpers";
 import { useOutsideClick } from "@/hooks/useOutSideClikDetector";
+import { X } from "lucide-react";
 import React, { useState, useRef } from "react";
 
 export interface DropdownOption<T = string> {
@@ -18,6 +19,7 @@ interface CommonDropdownProps<T = string> {
   className?: string;
   optionClassName?: string;
   name?: string;
+  isClearable?: boolean;
 }
 
 export function CommonDropdown<T = string>({
@@ -31,11 +33,12 @@ export function CommonDropdown<T = string>({
   className,
   optionClassName,
   name,
+  isClearable
 }: CommonDropdownProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const selected = options.find((opt) => opt.value === value);
+  const selected = options.find((opt) => String(opt.value) === String(value));
 
   const handleSelect = (val: T) => {
     if (disabled) return;
@@ -64,21 +67,26 @@ export function CommonDropdown<T = string>({
         onClick={() => !disabled && setIsOpen((p) => !p)}
       >
         <div className="flex justify-between items-center px-4 py-2">
-          <span className={cn(!selected && "text-gray-400")}>
+
+          <span className={cn(!selected && "text-gray-400", "flex items-center gap-2")}>
             {selected ? selected.label : placeholder}
           </span>
-          <svg
-            className={cn(
-              "w-4 h-4 ml-2 transition-transform duration-200",
-              isOpen ? "rotate-180" : "rotate-0"
-            )}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
-            <path d="M6 9l6 6 6-6" />
-          </svg>
+          {(isClearable && selected) ? (
+            <X className="w-4 h-4 text-red-400 hover:text-red-600" strokeWidth={2.5} onClick={(e) => { e.stopPropagation(); handleSelect('' as T) }} />
+          ) : (
+            <svg
+              className={cn(
+                "w-4 h-4 ml-2 transition-transform duration-200",
+                isOpen ? "rotate-180" : "rotate-0"
+              )}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          )}
         </div>
 
         {isOpen && (

@@ -8,29 +8,48 @@ import { resolve } from "path";
 import { serviceDetailsSchema } from "@/validation/formSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ATTEMP_OPTIONS, EXAM_TYPES, POST_OPTIONS } from "@/helpers/form";
-import { useServiceDetails } from "@/hooks/useForm";
+import { useServiceDetails, useUpdateServiceDetails } from "@/hooks/useForm";
+import { ServiceDetails, ServiceDetailsPayload } from "@/types";
+import { useToast } from "@/context";
 interface ServiceDetailProps {
     prevStep: () => void;
+    serviceDetails?: ServiceDetails | null;
+    isLoading?: boolean;
+    refetch?: () => void;
 }
 
-export const ServiceDetail: React.FC<ServiceDetailProps> = ({ prevStep }) => {
-    const [chancesTaken, setChancesTaken] = useState<string | undefined>();
+export const ServiceDetail: React.FC<ServiceDetailProps> = ({ prevStep, serviceDetails, isLoading, refetch }) => {
+    const serviceDetailsId = serviceDetails?.id;
     const { mutateAsync: createServiceDetails, isPending } = useServiceDetails();
+    const { mutateAsync: updateServiceDetails, isPending: isUpdating } = useUpdateServiceDetails(serviceDetailsId || "");
+    const { setToast } = useToast();
     const methods = useForm({
         resolver: yupResolver(serviceDetailsSchema),
         mode: "onSubmit",
-        defaultValues: {
-            joining_appointment_date: "",
-            regular_appointment_date: "",
-            post_at_appointment: "",
-            ppan: "",
-            pran: "",
-            exams: EXAM_TYPES.map((type) => ({
-                exam_type: type,
-                passing_date: "",
-                attempt_count: undefined,
-            }))
-        }
+        defaultValues: serviceDetails
+            ? {
+                joining_appointment_date: serviceDetails.joining_appointment_date,
+                regular_appointment_date: serviceDetails.regular_appointment_date,
+                post_at_appointment: serviceDetails.post_at_appointment,
+                ppan: serviceDetails.ppan,
+                pran: serviceDetails.pran,
+                exams: serviceDetails.exams.map((exam) => ({
+                    exam_type: exam.exam_type,
+                    passing_date: exam.passing_date,
+                    attempt_count: exam.attempt_count,
+                }))
+            } : {
+                joining_appointment_date: "",
+                regular_appointment_date: null,
+                post_at_appointment: "",
+                ppan: "",
+                pran: "",
+                exams: EXAM_TYPES.map((type) => ({
+                    exam_type: type,
+                    passing_date: null,
+                    attempt_count: undefined,
+                }))
+            }
     })
     const { fields } = useFieldArray({
         control: methods.control,
@@ -39,14 +58,33 @@ export const ServiceDetail: React.FC<ServiceDetailProps> = ({ prevStep }) => {
 
 
     const onSubmit = async (data: any) => {
-        console.log("data", data)
+        try {
+            if (serviceDetailsId) {
+                await updateServiceDetails(data);
+                setToast({
+                    type: "success",
+                    title: "Success",
+                    message: "Service details updated successfully.",
+                });
+            } else {
+                const createPayload = {
+                    ...data,
+                    is_step_completed: true,
+                    root_form_id: localStorage.getItem("form_id")
+                }
+                await createServiceDetails(createPayload);
+            }
+            refetch?.();
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     return (
-        <div className="px-6 w-[95%]">
+        <div className="w-5/6 pe-auto">
             <h2 className="text-2xl font-semibold text-gray-800 mb-8">Service Details</h2>
             <FormProvider {...methods}>
-                <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
+                <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8 px-6">
                     {/* ====== Joining / Appointment ====== */}
                     <div className="grid grid-cols-3 items-start gap-6">
                         <div>
@@ -129,16 +167,19 @@ export const ServiceDetail: React.FC<ServiceDetailProps> = ({ prevStep }) => {
                                 <Controller
                                     control={methods.control}
                                     name={`exams.${index}.attempt_count`}
-                                    render={({ field, fieldState }) => (
-                                        <CommonDropdown
-                                            options={ATTEMP_OPTIONS}
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            placeholder="Attempt Count"
-                                            optionClassName="flex w-fit"
-                                            error={fieldState.error?.message}
-                                        />
-                                    )}
+                                    render={({ field, fieldState }) => {
+                                        return (
+                                            <CommonDropdown
+                                                options={ATTEMP_OPTIONS}
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                placeholder="Attempt Count"
+                                                optionClassName="flex w-fit"
+                                                error={fieldState.error?.message}
+                                                isClearable={true}
+                                            />
+                                        )
+                                    }}
                                 />
                             </div>
                         </div>
@@ -195,8 +236,15 @@ export const ServiceDetail: React.FC<ServiceDetailProps> = ({ prevStep }) => {
                             variant="primary"
                             size="md"
                             type="submit"
+                            disabled={isPending || isUpdating}
                         >
-                            Submit
+                            {isUpdating
+                                ? "Updating..."
+                                : isPending
+                                    ? "Saving..."
+                                    : serviceDetailsId
+                                        ? "Update"
+                                        : "Submit"}
                         </Button>
                     </div>
                 </form>

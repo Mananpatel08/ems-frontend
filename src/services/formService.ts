@@ -23,7 +23,7 @@ export default class FormService {
 
     // CREATE SERVICE DETAILS STEP
     async serviceDetail(data: ServiceDetailsPayload) {
-        const response = await apiClient.post("/form", data);
+        const response = await apiClient.post("/form/service-details/", data);
         return response.data;
     }
 

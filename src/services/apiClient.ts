@@ -1,4 +1,4 @@
-import { BASE_API_URL } from "@/helpers";
+import { BASE_API_URL, getCookie } from "@/helpers";
 import axios from "axios";
 
 const apiClient = axios.create({
@@ -9,20 +9,18 @@ const apiClient = axios.create({
   },
 });
 
-apiClient.interceptors.request.use((config) => {
-  const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
-  if (token && config.headers) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// apiClient.interceptors.request.use((config) => {
+//   const token = getCookie("access_token");;
+//   if (token && config.headers) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });s
 
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem("access_token");
-
       if (typeof window !== "undefined") {
         window.location.href = "/login";
       }
@@ -30,6 +28,5 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 export default apiClient;

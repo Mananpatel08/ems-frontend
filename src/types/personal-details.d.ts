@@ -31,9 +31,9 @@ export interface PersonalDetail {
   updated_by: string | null;
 }
 
-export interface ApiSuccessResponse<T> {
+export interface ApiSuccessResponse<T, E = unknown> {
   status: boolean;
   message: string;
   data: T;
-  errors: any;
+  errors?: E;
 }

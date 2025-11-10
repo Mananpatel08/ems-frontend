@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useLogin } from "@/hooks/useAuth";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/context";
 import Checkbox from "../ui/checkbox";
 import { Eye, EyeOff } from "lucide-react";
+import { LoginFormData } from "@/types/login";
 
 export const AuthRoot = () => {
     const router = useRouter();
@@ -27,7 +28,7 @@ export const AuthRoot = () => {
     const onSubmit = async (data: LoginFormData) => {
         try {
             const response = await login(data);
-            localStorage.setItem("access_token", response.data.access);
+            const user_role = response.data.user.user_role
             if (remember) {
                 localStorage.setItem("rememberedEmail", data.email);
                 localStorage.setItem("rememberedPassword", data.password);
@@ -35,8 +36,10 @@ export const AuthRoot = () => {
                 localStorage.removeItem("rememberedEmail");
                 localStorage.removeItem("rememberedPassword");
             }
-            if (response.status) {
+            if (response.status && user_role === "SUPER_ADMIN") {
                 router.push("/");
+            } else {
+                router.push("/forms");
             }
         } catch (error: any) {
             console.error(error);

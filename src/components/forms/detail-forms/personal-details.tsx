@@ -59,10 +59,9 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({ nextStep, perso
         try {
             if (personalDetailId) {
                 await updatePersonalDetails(data);
-                refetch?.();
                 setToast({
                     type: "success",
-                    title: "Success!",
+                    title: "Success",
                     message: "Personal details updated successfully.",
                 });
             } else {
@@ -73,9 +72,9 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({ nextStep, perso
                 const response = await createPersonalDetails({
                     personal_details: createPayload
                 });
-                localStorage.setItem("form_id", response.id);
                 nextStep();
             }
+            refetch?.();
         } catch (err) {
             console.error(err);
         }
@@ -86,14 +85,14 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({ nextStep, perso
         if (personalDetails?.gender) setGender(personalDetails.gender);
     }, [personalDetails]);
     return (
-        <div className="px-6 w-[95%] ">
+        <div className="w-5/6 me-auto">
             <h2 className="text-2xl font-semibold text-gray-800 mb-8">
                 Personal Information
             </h2>
             <FormProvider {...methods}>
-                <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
+                <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8 px-6">
                     {/* ====== Name ====== */}
-                    <div className="grid grid-cols-3 items-start gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 items-start gap-6">
                         <div>
                             <label className="text-gray-700 font-medium">Your Name</label>
                             <p className="text-gray-400 text-sm">First, middle, and last name</p>

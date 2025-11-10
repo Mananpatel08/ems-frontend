@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight, ChevronDown, X } from "lucide-react";
 import dayjs from "dayjs";
@@ -51,7 +53,7 @@ export function DatePicker({ name, placeholder = "Select date", isClearable }: D
                 const daysInMonth = current.daysInMonth();
 
                 const handleSelect = (date: dayjs.Dayjs) => {
-                    field.onChange(date.toISOString());
+                    field.onChange(date.format("YYYY-MM-DD"));
                     setCurrent(date);
                     setOpen(false);
                 };
@@ -64,13 +66,14 @@ export function DatePicker({ name, placeholder = "Select date", isClearable }: D
                             className={`w-full px-3 py-2 border rounded-xl bg-white shadow-sm flex justify-between items-center 
                                 ${fieldState.error ? "border-red-500" : "border-gray-300"}`}
                         >
-                            <span className={`flex items-center gap-2 ${selected ? "text-gray-900" : "text-gray-400"}`}>
+                            <span className={`${selected ? "text-gray-900" : "text-gray-400"}`}>
                                 {selected ? selected.format("DD MMM YYYY") : placeholder}
-                                {isClearable && selected && (
-                                    <X className="w-4 h-4 text-red-400 hover:text-red-600" strokeWidth={2.5} onClick={(e) => { e.stopPropagation(); field.onChange("") }} />
-                                )}
                             </span>
-                            <CalendarDaysIcon className="w-5 h-5" />
+                            {isClearable && selected ? (
+                                <X className="w-4 h-4 text-red-400 hover:text-red-600" strokeWidth={2.5} onClick={(e) => { e.stopPropagation(); field.onChange("") }} />
+                            ) : (
+                                <CalendarDaysIcon className="w-5 h-5" />
+                            )}
                         </button>
 
                         {fieldState.error && (

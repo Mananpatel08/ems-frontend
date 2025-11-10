@@ -12,6 +12,8 @@ import {
     LogOut,
 } from "lucide-react";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
+import { useLogout } from "@/hooks/useAuth";
+import { useUserContext } from "@/context";
 
 type MenuItemProps = {
     icon: JSX.Element;
@@ -22,6 +24,12 @@ type MenuItemProps = {
 export default function ProfileDropdown() {
     const [open, setOpen] = useState<boolean>(false);
     const ref = useRef<HTMLDivElement | null>(null);
+    const { mutateAsync: logout, isPending } = useLogout();
+    const { user } = useUserContext();
+
+    const handleLogout = async () => {
+        await logout();
+    };
 
     useEffect(() => {
         function handleClickOutside(e: MouseEvent) {
@@ -49,8 +57,8 @@ export default function ProfileDropdown() {
                     <div className="flex items-center gap-3 p-2 border-b pb-3">
                         <UserCircleIcon className="w-10 h-10 text-blue-600" />
                         <div className="text-sm">
-                            <p className="font-semibold">Godzilla D. White</p>
-                            <p className="text-gray-500 text-xs">supportingtext@gmail.com</p>
+                            <p className="font-semibold">{user?.first_name + " " + user?.last_name}</p>
+                            <p className="text-gray-500 text-xs">{user?.email}</p>
                         </div>
                     </div>
 
@@ -64,7 +72,7 @@ export default function ProfileDropdown() {
                         <MenuItem icon={<Headphones size={16} />} label="Support" />
                     </div>
 
-                    <div className="border-t pt-2">
+                    <div className="border-t pt-2 text-red-500" onClick={() => { handleLogout() }}>
                         <MenuItem icon={<LogOut size={16} />} label="Sign Out" />
                     </div>
                 </motion.div>

@@ -20,7 +20,7 @@ interface FormSidebarProps {
 
 export const FormSidebar: React.FC<FormSidebarProps> = ({ currentStep = 1, setStep }) => {
   return (
-    <aside className="flex flex-col items-start p-8 ">
+    <aside className="flex md:flex-col items-start">
       <div className="w-full">
         {steps.map((step, index) => {
           const isCompleted = index + 1 < currentStep;
