@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/helpers";
 import { useOutsideClick } from "@/hooks/useOutSideClikDetector";
 import { X } from "lucide-react";
