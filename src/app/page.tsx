@@ -1,12 +1,16 @@
-import { DashboardLayout } from '@/components/ui'
+import { UserGreetingsView } from '@/components/dashboard'
+import DashboardCards from '@/components/dashboard/dashboard-cards'
+import { DashboardLayout } from '@/components/layout'
+
+
 import React from 'react'
 
 const Dashboard = () => {
   return (
     <DashboardLayout>
       <>
-        <h4 className='font-bold'>Dashboard Page</h4>
-        <p className='text-gray-500 text-xs'>Cooming Soon</p>
+        <UserGreetingsView />
+        <DashboardCards />
       </>
     </DashboardLayout>
   )

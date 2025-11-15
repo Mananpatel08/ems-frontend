@@ -22,16 +22,15 @@ export function middleware(request: NextRequest) {
     }
 
 
-    // try {
-    //   const payload = JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
-    //   const userRole = payload;
-    //   console.log("role", userRole);
-    //   if (pathname === "/" && userRole !== "SUPER_ADMIN") {
-    //     return NextResponse.redirect(new URL("/unauthorized", request.url));
-    //   }
-    // } catch (error) {
-    //   return NextResponse.redirect(new URL("/login", request.url));
-    // }
+    try {
+      const payload = JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
+      const userRole = payload.user_role;
+      if (pathname === "/" && userRole !== "SUPER_ADMIN") {
+        return NextResponse.redirect(new URL("/unauthorized", request.url));
+      }
+    } catch (error) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
 
   }
 

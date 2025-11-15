@@ -1,7 +1,13 @@
 import FormService from "@/services/formService"
-import { FormDataResponse, PersonalDetailCreatePayload } from "@/types"
+import { FormDataResponse, FormResponse, IForm, PersonalDetailCreatePayload } from "@/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
+export const useGetForms = (params: any) => {
+    return useQuery<FormResponse>({
+        queryKey: ["get-forms", params],
+        queryFn: () => new FormService().getForms(params),
+    })
+}
 
 export const useFormById = (id: string) => {
     return useQuery<FormDataResponse>({

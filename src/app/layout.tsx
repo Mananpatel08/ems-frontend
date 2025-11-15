@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "../style/globals.css";
 import "nprogress/nprogress.css";
 import NProgressWrapper from "./NProgressWrapper";
-import { QueryProvider, ToastProviderWrapper, UserProviderWrapper } from "@/providers";
+import { QueryProvider, ToastProviderWrapper, UserProviderWrapper, DashBoardPrividerWrapper } from "@/providers";
 
 export const metadata: Metadata = {
   title: "Login | EMS",
@@ -20,8 +20,10 @@ export default function RootLayout({
         <ToastProviderWrapper>
           <QueryProvider>
             <UserProviderWrapper>
-              <NProgressWrapper />
-              {children}
+              <DashBoardPrividerWrapper>
+                <NProgressWrapper />
+                {children}
+              </DashBoardPrividerWrapper>
             </UserProviderWrapper>
           </QueryProvider>
         </ToastProviderWrapper>

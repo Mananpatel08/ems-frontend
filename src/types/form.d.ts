@@ -18,9 +18,33 @@ export interface FormDataResponse {
   user: string;
 }
 
-// interface FormDataResponse {
-//   status: boolean;
-//   message: string;
-//   data: RootFormData;
-//   errors: null | Record<string, string[]>;
-// }
+export interface IForm {
+  id: string;
+  created_at: string;
+  deleted_at: string | null;
+  updated_at: string;
+  step_completed: number[];
+  status: string;
+  completed_at: string | null;
+  current_step: number;
+  form_number: string;
+  created_by: string;
+  updated_by: string | null;
+  user: string;
+}
+
+type Pagination = {
+    current_page: number,
+    page_size: number,
+    total_items: number,
+    total_pages: number,
+    has_next: boolean,
+    has_previous: boolean
+}
+
+export interface FormResponse {
+  status: boolean;
+  message: string;
+  pagination: Pagination;
+  data: IForm[];
+}

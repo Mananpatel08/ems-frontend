@@ -35,9 +35,9 @@ export default function SidebarMenu({ toggleActive }: { toggleActive: boolean })
                             <Link
                                 href={item.href}
                                 className={`text-base px-3 py-2.5 flex items-center gap-3 rounded-xl transition-all ${isActive
-                                        ? "bg-white shadow-md text-black"
-                                        : "hover:bg-gray-300/25 hover:shadow-sm text-gray-600"
-                                    }`}
+                                    ? "bg-blue-100/50 text-blue-600"
+                                    : "hover:bg-gray-300/25 hover:shadow-sm text-gray-600"
+                                    } ${!toggleActive && "w-fit"}`}
                             >
                                 <span className="w-[25px] h-[25px] rounded-full flex items-center justify-center">
                                     <Icon className="w-5 h-5" />

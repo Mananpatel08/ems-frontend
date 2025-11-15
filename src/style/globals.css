@@ -22,3 +22,7 @@ body {
 #nprogress .spinner {
   display: none;
 }
+
+.bg-custom-backdrop {
+    background-color: rgba(0, 0, 0, 0.25);
+}

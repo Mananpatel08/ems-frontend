@@ -1,13 +1,12 @@
-import { DashboardLayout } from '@/components/ui'
+
+import { DashboardLayout } from '@/components/layout'
+import { UserListRoot } from '@/components/user-list'
 import React from 'react'
 
 const UsersPage = () => {
     return (
         <DashboardLayout>
-            <>
-                <h4 className='font-bold'>Users Page</h4>
-                <p className='text-gray-500 text-xs'>Cooming Soon</p>
-            </>
+            <UserListRoot />
         </DashboardLayout>
     )
 }

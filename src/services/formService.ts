@@ -1,7 +1,15 @@
-import { ApiSuccessResponse, FormDataResponse, PersonalDetail, PersonalDetailCreatePayload, PersonalDetailPayload, ServiceDetailsPayload } from "@/types";
+import { ApiSuccessResponse, FormDataResponse, FormResponse, PersonalDetail, PersonalDetailCreatePayload, PersonalDetailPayload, ServiceDetailsPayload } from "@/types";
 import apiClient from "./apiClient";
 
 export default class FormService {
+
+    // GET FORMS
+    async getForms(params: any): Promise<FormResponse> {
+        const response = await apiClient.get<FormResponse>(`/form/`, {
+            params
+        });
+        return response.data;
+    }
 
     // GET FORM BY ID
     async getForm(id: string): Promise<FormDataResponse> {

@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect, RefObject, JSX } from "react";
+"use client";
 
+import { useState, useRef, useEffect, JSX } from "react";
 import { motion } from "framer-motion";
 import {
     User,
@@ -10,6 +11,7 @@ import {
     Headphones,
     MessageCircle,
     LogOut,
+    ChevronDownIcon,
 } from "lucide-react";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { useLogout } from "@/hooks/useAuth";
@@ -43,8 +45,21 @@ export default function ProfileDropdown() {
 
     return (
         <div className="relative inline-block text-left h-10" ref={ref}>
-            <button onClick={() => setOpen(!open)} className="focus:outline-none">
+            <button onClick={() => setOpen(!open)} className="flex items-center gap-1.5 focus:outline-none">
                 <UserCircleIcon className="w-10 h-10 text-blue-600" />
+
+                {/* Name + Role */}
+                <div className="flex flex-col text-left">
+                    <span className="text-sm font-medium text-gray-900">
+                        {user?.first_name + " " + user?.last_name}
+                    </span>
+                    <span className="text-xs text-gray-500 -mt-0.5">
+                        {user?.user_role === "SUPER_ADMIN" ? "Admin" : "User"}
+                    </span>
+                </div>
+
+                {/* Chevron Icon */}
+                <ChevronDownIcon className={`w-4 h-4 ml-1 text-gray-500 ${open ? "rotate-180" : ""}`} />
             </button>
 
             {open && (
@@ -52,7 +67,7 @@ export default function ProfileDropdown() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="absolute right-0 w-64 rounded-2xl bg-white shadow-xl border p-3 z-50"
+                    className="absolute right-0 top-11 w-64 rounded-2xl bg-white shadow-xl border p-3 z-50"
                 >
                     <div className="flex items-center gap-3 p-2 border-b pb-3">
                         <UserCircleIcon className="w-10 h-10 text-blue-600" />
@@ -65,11 +80,6 @@ export default function ProfileDropdown() {
                     <div className="space-y-1 py-2">
                         <MenuItem icon={<User size={16} />} label="View Profile" />
                         <MenuItem icon={<Settings size={16} />} label="Settings" />
-                        <MenuItem icon={<CreditCard size={16} />} label="Subscription" />
-                        <MenuItem icon={<Clock size={16} />} label="Changelog" />
-                        <MenuItem icon={<Users size={16} />} label="Team" />
-                        <MenuItem icon={<MessageCircle size={16} />} label="Community" />
-                        <MenuItem icon={<Headphones size={16} />} label="Support" />
                     </div>
 
                     <div className="border-t pt-2 text-red-500" onClick={() => { handleLogout() }}>

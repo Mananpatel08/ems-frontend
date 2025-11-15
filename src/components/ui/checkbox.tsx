@@ -1,16 +1,21 @@
+import { cn } from '@/helpers';
 import React, { FC, useState } from 'react';
 
 type Props = {
     checked: boolean,
     setChecked: React.Dispatch<React.SetStateAction<boolean>>
+    label?: string;
+    labelClassName?: string
 }
 const Checkbox: FC<Props> = ({
     checked,
-    setChecked
+    setChecked,
+    label = 'Remember Me',
+    labelClassName,
 }) => {
 
     return (
-        <label className="flex items-center text-xs cursor-pointer select-none gap-1.5 text-gray-400">
+        <label className={cn("flex items-center text-xs cursor-pointer select-none gap-1.5 text-gray-400", labelClassName)}>
             {/* Hidden native checkbox */}
             <input
                 type="checkbox"
@@ -40,7 +45,7 @@ const Checkbox: FC<Props> = ({
             </div>
 
             {/* Label */}
-            Remember Me
+            {label}
         </label>
     );
 };

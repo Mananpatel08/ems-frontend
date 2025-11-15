@@ -11,6 +11,8 @@ interface InputProps {
   name: string;
   icon?: ReactNode;
   error?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
 }
 
 export const Input = ({
@@ -22,8 +24,9 @@ export const Input = ({
   name,
   icon,
   error,
+  ...props
 }: InputProps) => {
-  const formContext = useFormContext();
+  const formContext = useFormContext?.();
 
   const register = formContext?.register;
   const fieldError =
@@ -48,6 +51,7 @@ export const Input = ({
           type={type}
           {...(register ? register(name) : {})}
           placeholder={placeholder}
+          {...props}
           className={cn(
             "w-full rounded-xl border px-3 py-2 outline-none focus:ring-0.5",
             icon && "pl-10",
