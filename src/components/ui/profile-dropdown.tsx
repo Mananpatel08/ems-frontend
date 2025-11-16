@@ -17,6 +17,7 @@ import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { useLogout } from "@/hooks/useAuth";
 import { useUserContext } from "@/context";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 type MenuItemProps = {
     icon: JSX.Element;
@@ -33,6 +34,8 @@ export default function ProfileDropdown() {
 
     const handleLogout = async () => {
         await logout();
+        Cookies.remove("token");
+        router.push("/login");
     };
 
     useEffect(() => {

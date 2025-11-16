@@ -8,6 +8,7 @@ import { useToast } from "@/context";
 import Checkbox from "../ui/checkbox";
 import { Eye, EyeOff } from "lucide-react";
 import { LoginFormData } from "@/types/login";
+import Cookies from "js-cookie";
 
 export const AuthRoot = () => {
     const router = useRouter();
@@ -28,7 +29,16 @@ export const AuthRoot = () => {
     const onSubmit = async (data: LoginFormData) => {
         try {
             const response = await login(data);
-            const user_role = response.data.user.user_role
+            const access = response.data.access;
+            const user_role = response.data.user.user_role;
+            console.log("access", access);
+            Cookies.set("token", access, {
+                expires: 7,
+                secure: true,    
+                sameSite: "None",
+                path: "/",
+            });
+            console.log("cooket seted")
             if (remember) {
                 localStorage.setItem("rememberedEmail", data.email);
                 localStorage.setItem("rememberedPassword", data.password);
