@@ -16,6 +16,7 @@ import {
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { useLogout } from "@/hooks/useAuth";
 import { useUserContext } from "@/context";
+import { useRouter } from "next/navigation";
 
 type MenuItemProps = {
     icon: JSX.Element;
@@ -24,6 +25,7 @@ type MenuItemProps = {
 };
 
 export default function ProfileDropdown() {
+    const router = useRouter();
     const [open, setOpen] = useState<boolean>(false);
     const ref = useRef<HTMLDivElement | null>(null);
     const { mutateAsync: logout, isPending } = useLogout();
@@ -67,19 +69,22 @@ export default function ProfileDropdown() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="absolute right-0 top-11 w-64 rounded-2xl bg-white shadow-xl border p-3 z-50"
+                    className="absolute right-0 top-11 w-64 rounded-2xl bg-white shadow-xl border p-1 z-50"
                 >
-                    <div className="flex items-center gap-3 p-2 border-b pb-3">
-                        <UserCircleIcon className="w-10 h-10 text-blue-600" />
+                    <div className="flex items-center gap-3 p-2 pb-1">
+                        {/* <UserCircleIcon className="w-10 h-10 text-blue-600" /> */}
                         <div className="text-sm">
-                            <p className="font-semibold">{user?.first_name + " " + user?.last_name}</p>
+                            {/* <p className="font-semibold">{user?.first_name + " " + user?.last_name}</p> */}
                             <p className="text-gray-500 text-xs">{user?.email}</p>
                         </div>
                     </div>
 
-                    <div className="space-y-1 py-2">
-                        <MenuItem icon={<User size={16} />} label="View Profile" />
-                        <MenuItem icon={<Settings size={16} />} label="Settings" />
+                    <div className="space-y-1 pb-2">
+                        <MenuItem
+                            onClick={() => router.push("/profile")}
+                            icon={<Settings size={16} />}
+                            label="Settings"
+                        />
                     </div>
 
                     <div className="border-t pt-2 text-red-500" onClick={() => { handleLogout() }}>

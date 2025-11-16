@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, UserRoundX } from "lucide-react";
 import { Calendar, ChevronDown, Edit, Trash } from "lucide-react";
 import { Input } from "../ui";
 import { useGetUser } from "@/hooks/useUser";
@@ -13,9 +13,10 @@ import { FunnelIcon } from "@heroicons/react/24/outline";
 import { AlertModalCore } from "../ui/modals";
 import { UserDeleteModal } from "./user-delete-modal";
 import { User } from "@/types";
+import { tr } from "framer-motion/client";
 
 export default function UserTable() {
-    const [ deleteUser, setDeleteUser ] = useState<User>();
+    const [deleteUser, setDeleteUser] = useState<User>();
     const [params, setParams] = useState({
         page: 1,
         search: "",
@@ -48,12 +49,13 @@ export default function UserTable() {
         setParams((prev) => ({ ...prev, page: pageNum }));
     };
 
+    if (!data) return null;
 
     return (
         <>
             <UserDeleteModal
                 isOpen={deleteUser !== undefined}
-                onClose={() => {setDeleteUser(undefined)}}
+                onClose={() => { setDeleteUser(undefined) }}
                 data={deleteUser}
             />
             <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-200">
@@ -123,7 +125,16 @@ export default function UserTable() {
                                                 </div>
                                             </td>
                                         </tr>
-                                    )) : users?.map((user) => (
+                                    )) : users.length === 0 ? (
+                                        <tr className="bg-white">
+                                            <td colSpan={5} className="py-8 px-5 text-center">
+                                                <div className=" flex flex-col items-center justify-center">
+                                                    <UserRoundX className="h-8 w-8 text-gray-400" />
+                                                    <span className="text-gray-400"> No Users Found </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ) : users?.map((user) => (
                                         <tr
                                             key={user.id}
                                             className="border-b border-gray-100 bg-white hover:bg-gray-50"
@@ -145,12 +156,12 @@ export default function UserTable() {
                                                 <button className="p-2 rounded-lg border border-gray-300 hover:bg-gray-200">
                                                     <Edit className="w-4 h-4" />
                                                 </button>
-                                                <button 
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setDeleteUser(user);
-                                                }}
-                                                className="p-2 rounded-lg border border-gray-300 hover:bg-gray-200">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setDeleteUser(user);
+                                                    }}
+                                                    className="p-2 rounded-lg border border-gray-300 hover:bg-gray-200">
                                                     <Trash className="w-4 h-4" />
                                                 </button>
                                             </td>
@@ -165,12 +176,13 @@ export default function UserTable() {
                         {start} – {end} of {totalItems} entries
                     </p>
 
-                    <Pagination
-                        page={currentPage}
-                        total={data?.pagination.total_pages || 1}
-                        onPageChange={goToPage}
-                        handleChangePage={handleChangePage}
-                    />
+                    {data?.pagination.total_pages > 1 && (
+                        <Pagination
+                            page={currentPage}
+                            total={data?.pagination.total_pages || 1}
+                            onPageChange={goToPage}
+                            handleChangePage={handleChangePage}
+                        />)}
                 </div>
             </div>
         </>

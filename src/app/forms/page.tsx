@@ -5,9 +5,7 @@ import React from 'react'
 const FormsPage = () => {
     return (
         <DashboardLayout>
-            <>
-                <FormListRoot />
-            </>
+            <FormListRoot />
         </DashboardLayout>
     )
 }

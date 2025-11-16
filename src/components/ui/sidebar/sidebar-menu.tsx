@@ -6,7 +6,9 @@ import {
     Squares2X2Icon,
     UsersIcon,
     DocumentTextIcon,
+    KeyIcon,
 } from "@heroicons/react/24/outline";
+import { Settings2 } from "lucide-react";
 
 type MenuItem = {
     name: string;
@@ -14,14 +16,21 @@ type MenuItem = {
     icon: React.ElementType;
 };
 
-const menuItems: MenuItem[] = [
+const dashboardMenuItems: MenuItem[] = [
     { name: "Dashboard", href: "/", icon: Squares2X2Icon },
     { name: "Users", href: "/users", icon: UsersIcon },
     { name: "User Forms", href: "/forms", icon: DocumentTextIcon },
 ];
 
-export default function SidebarMenu({ toggleActive }: { toggleActive: boolean }) {
+const profileMenuItems: MenuItem[] = [
+    { name: "Profile", href: "/profile", icon: UsersIcon },
+    { name: "Security", href: "/profile/security", icon: KeyIcon },
+    { name: "Appearance", href: "/profile/appearance", icon: Settings2 },
+]
+
+export default function SidebarMenu({ toggleActive, isProfile }: { toggleActive: boolean, isProfile: boolean }) {
     const pathname = usePathname();
+    const menuItems = isProfile ? profileMenuItems : dashboardMenuItems
 
     return (
         <nav>

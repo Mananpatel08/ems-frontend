@@ -2,7 +2,7 @@
 
 import { BadgeCent, BadgeSwissFranc, BaggageClaim, CakeSlice, CarFront, ChevronUpIcon, CircleChevronLeft, Lightbulb, LucideLayoutDashboard } from 'lucide-react'
 import Image from 'next/image';
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import EMS from '../../../../public/logos/light-ens-logo.png'
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -10,8 +10,11 @@ import { ChevronLeftIcon, DocumentTextIcon, Squares2X2Icon, UsersIcon } from '@h
 import SidebarMenu from './sidebar-menu';
 import { useDashboardLayout } from '@/context/DashboardContext';
 
-export const DashboardSidebar = () => {
-    const { toggleActive, setToggleActive } = useDashboardLayout();
+type Props = {
+    isProfile: boolean
+}
+export const DashboardSidebar: FC<Props> = ({ isProfile }) => {
+    const { toggleActive, setToggleActive, toggleSidebar } = useDashboardLayout();
     const themeChange = true;
     return (
         <>
@@ -23,15 +26,18 @@ export const DashboardSidebar = () => {
             >
                 <div className='relative'>
                     <Link
-                        href=""
-                        className="bg-white py-4 px-8 w-full lg:flex hidden gap-[10px] items-center h-[70px]"
+                        href="/"
+                        className="bg-white py-4 px-8 w-full lg:flex hidden gap-[10px] items-center h-[70px] "
                     >
-                        {/* <Image src={EMS} width={50} height={50} alt="" /> */}
+                        <div className='flex items-center gap-2 '>
+                            {isProfile && (<ChevronLeftIcon className='w-5 h-5' />)}
+                            {toggleActive && (isProfile ? "Profile Settings" : "EMS | EMS.NET")}
+                        </div>
                     </Link>
                     <div
-                        onClick={() => setToggleActive(!toggleActive)}
-                        className="absolute top-[3.8rem] right-[-0.6rem] border bg-white hover:bg-gray-300/25 
-                            rounded-full p-0.5 cursor-pointer transition-all duration-300 shadow-sm"
+                        onClick={() => toggleSidebar()}
+                        className="absolute top-[3.8rem] right-[-0.6rem] border bg-white hover:bg-gray-100
+                            rounded-full p-0.5 hidden lg:block cursor-pointer transition-all duration-300 shadow-sm"
                     >
                         <ChevronLeftIcon
                             className={`h-3.5 w-3.5 transition-all duration-300 
@@ -44,8 +50,7 @@ export const DashboardSidebar = () => {
                     className={`${themeChange ? "bg-white" : "bg-white"
                         } px-[20px] py-1 h-full overflow-y-auto overflow-x-hidden `}
                 >
-                    <SidebarMenu toggleActive={toggleActive} />
-
+                    <SidebarMenu toggleActive={toggleActive} isProfile={isProfile} />
                 </div>
             </aside>
         </>
