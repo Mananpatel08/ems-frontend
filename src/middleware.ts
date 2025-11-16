@@ -6,7 +6,7 @@ const publicPaths = ["/login"];
 const protectedPaths = ["/", "/form",];
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get("access_token")?.value;
+  const token = request.cookies.get("token")?.value;
   const pathname = request.nextUrl.pathname;
 
   if (publicPaths.some((path) => pathname.startsWith(path))) {
