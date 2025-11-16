@@ -31,14 +31,12 @@ export const AuthRoot = () => {
             const response = await login(data);
             const access = response.data.access;
             const user_role = response.data.user.user_role;
-            console.log("access", access);
             Cookies.set("token", access, {
                 expires: 7,
-                secure: true,    
+                secure: true,
                 sameSite: "None",
                 path: "/",
             });
-            console.log("cooket seted")
             if (remember) {
                 localStorage.setItem("rememberedEmail", data.email);
                 localStorage.setItem("rememberedPassword", data.password);
@@ -46,10 +44,11 @@ export const AuthRoot = () => {
                 localStorage.removeItem("rememberedEmail");
                 localStorage.removeItem("rememberedPassword");
             }
+            console.log("role", user_role)
             if (response.status && user_role === "SUPER_ADMIN") {
                 router.push("/");
             } else {
-                router.push("/forms");
+                router.push("/form");
             }
         } catch (error: any) {
             console.error(error);

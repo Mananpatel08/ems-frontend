@@ -31,7 +31,7 @@ export const DashboardSidebar: FC<Props> = ({ isProfile }) => {
                     >
                         <div className='flex items-center gap-2 '>
                             {isProfile && (<ChevronLeftIcon className='w-5 h-5' />)}
-                            {toggleActive && (isProfile ? "Profile Settings" : "EMS | EMS.NET")}
+                            {toggleActive && (isProfile ? "Profile Settings" : "")}
                         </div>
                     </Link>
                     <div

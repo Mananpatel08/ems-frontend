@@ -24,7 +24,6 @@ export function middleware(request: NextRequest) {
 
     try {
       const payload = JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
-      console.log("payload", payload);
       const userRole = payload.user_role;
       if (pathname === "/" && userRole !== "SUPER_ADMIN") {
         return NextResponse.redirect(new URL("/unauthorized", request.url));

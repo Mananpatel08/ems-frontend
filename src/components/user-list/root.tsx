@@ -11,7 +11,7 @@ export const UserListRoot = () => {
     return (
         <>
             <CreateUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-            <div className='w-full bg-gray-100 p-4'>
+            <div className='w-full h-full bg-gray-100 p-4'>
                 <div className='flex items-center justify-between py-2 mb-3'>
                     <h2>Users List</h2>
                     <Button

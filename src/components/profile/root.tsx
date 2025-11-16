@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Button, Input } from "../ui";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
+import profileIcon from "../../../public/icons/user-icon.png";
+import Image from "next/image";
 
 export const ProfileRoot = () => {
   const router = useRouter();
@@ -23,8 +25,12 @@ export const ProfileRoot = () => {
               className="h-44 w-full rounded-lg object-cover"
             // alt={currentUser?.first_name ?? "Cover image"}
             />
-            <div className="absolute -bottom-7 left-6 flex items-end justify-between">
-              <UserCircleIcon className="w-20 h-20" />
+            <div className="absolute -bottom-7 left-6 flex items-end justify-between w-20 h-20">
+              <Image
+                className=" rounded-full border-4 border-white"
+                src={profileIcon}
+                alt="User Image"
+              />
             </div>
           </div>
 

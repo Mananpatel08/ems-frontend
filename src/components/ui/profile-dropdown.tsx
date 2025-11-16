@@ -18,6 +18,8 @@ import { useLogout } from "@/hooks/useAuth";
 import { useUserContext } from "@/context";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { getFileURL } from "@/helpers";
+
 
 type MenuItemProps = {
     icon: JSX.Element;
@@ -51,7 +53,12 @@ export default function ProfileDropdown() {
     return (
         <div className="relative inline-block text-left h-10" ref={ref}>
             <button onClick={() => setOpen(!open)} className="flex items-center gap-1.5 focus:outline-none">
-                <UserCircleIcon className="w-10 h-10 text-blue-600" />
+                <img
+                    src={getFileURL(user?.profile_photo ?? "")?.toString()}
+                    width={44}
+                    height={44}
+                    className="rounded-full object-cover"
+                />
 
                 {/* Name + Role */}
                 <div className="flex flex-col text-left">
