@@ -38,7 +38,7 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({ nextStep, perso
                 middle_name: personalDetails.middle_name || "",
                 last_name: personalDetails.last_name || "",
                 gender: personalDetails.gender || "",
-                mobile_number: personalDetails.mobile_number || "",
+                mobile_number: personalDetails.mobile_number || undefined,
                 pan_number: personalDetails.pan_number || "",
                 voter_id: personalDetails.voter_id || "",
                 email: personalDetails.email || "",
@@ -48,7 +48,7 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({ nextStep, perso
                 middle_name: "",
                 last_name: "",
                 gender: "",
-                mobile_number: "",
+                mobile_number: undefined,
                 pan_number: "",
                 voter_id: "",
                 email: "",
@@ -101,14 +101,17 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({ nextStep, perso
                         <div className="col-span-2 grid grid-cols-3 gap-3">
                             <Input
                                 name="first_name"
+                                type="text"
                                 placeholder="First name"
                             />
                             <Input
                                 name="middle_name"
+                                type="text"
                                 placeholder="Middle name"
                             />
                             <Input
                                 name="last_name"
+                                type="text"
                                 placeholder="Last name"
                             />
                         </div>

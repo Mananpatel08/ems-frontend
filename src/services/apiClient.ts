@@ -1,5 +1,6 @@
 import { BASE_API_URL, getCookie } from "@/helpers";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const apiClient = axios.create({
   baseURL: BASE_API_URL,
@@ -22,6 +23,8 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== "undefined") {
+        Cookies.remove("token");
+        localStorage.clear();
         window.location.href = "/login";
       }
     }

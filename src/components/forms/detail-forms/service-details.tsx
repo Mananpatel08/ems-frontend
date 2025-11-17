@@ -11,6 +11,7 @@ import { ATTEMP_OPTIONS, EXAM_TYPES, POST_OPTIONS } from "@/helpers/form";
 import { useServiceDetails, useUpdateServiceDetails } from "@/hooks/useForm";
 import { ServiceDetails, ServiceDetailsPayload } from "@/types";
 import { useToast } from "@/context";
+import dayjs from "dayjs";
 interface ServiceDetailProps {
     prevStep: () => void;
     serviceDetails?: ServiceDetails | null;
@@ -98,6 +99,8 @@ export const ServiceDetail: React.FC<ServiceDetailProps> = ({ prevStep, serviceD
                             <DatePicker
                                 name="joining_appointment_date"
                                 placeholder="Joining Appointment Date"
+                                minDate="1967-01-01"
+                                maxDate={dayjs().format("YYYY-MM-DD")}
                             />
                         </div>
                     </div>
@@ -115,6 +118,8 @@ export const ServiceDetail: React.FC<ServiceDetailProps> = ({ prevStep, serviceD
                             <DatePicker
                                 name="regular_appointment_date"
                                 placeholder="Regular Appointment Date"
+                                minDate="2005-01-01"
+                                maxDate={dayjs().format("YYYY-MM-DD")}
                             />
                         </div>
                     </div>
@@ -160,7 +165,9 @@ export const ServiceDetail: React.FC<ServiceDetailProps> = ({ prevStep, serviceD
                                     control={methods.control}
                                     name={`exams.${index}.passing_date`}
                                     render={({ field }) => (
-                                        <DatePicker {...field} placeholder="Passing Date" isClearable={true} />
+                                        <DatePicker {...field} placeholder="Passing Date" isClearable={true}
+                                            minDate="1967-01-01"
+                                            maxDate={dayjs().format("YYYY-MM-DD")} />
                                     )}
                                 />
 

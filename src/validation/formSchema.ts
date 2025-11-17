@@ -1,12 +1,24 @@
 import * as Yup from "yup";
 
 export const personalDetailsSchema = Yup.object({
-  first_name: Yup.string().required("First name is required"),
-  middle_name: Yup.string().required("Middle name is required"),
-  last_name: Yup.string().required("Last name is required"),
+  first_name: Yup.string()
+    .matches(/^[A-Za-z]+$/, "First name must contain only letters")
+    .min(2, "First name must be at least 2 characters")
+    .required("First name is required"),
+  middle_name: Yup.string()
+    .matches(/^[A-Za-z]+$/, "Middle name must contain only letters")
+    .min(2, "Middle name must be at least 2 characters")
+    .required("Middle name is required"),
+  last_name: Yup.string()
+    .matches(/^[A-Za-z]+$/, "Last name must contain only letters")
+    .min(2, "Last name must be at least 2 characters")
+    .required("Last name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   gender: Yup.string().required("Select your gender"),
-  mobile_number: Yup.string().required("Mobile number is required"),
+  mobile_number: Yup.string()
+    .matches(/^[6-9][0-9]*$/, "Enter a valid mobile number")
+    .length(10, "Mobile number must be exactly 10 digits")
+    .required("Mobile number is required"),
   pan_number: Yup.string().required("PAN number is required"),
   voter_id: Yup.string().optional(),
 })

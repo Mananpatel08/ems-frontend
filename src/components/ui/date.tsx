@@ -14,13 +14,19 @@ type DatePickerProps = {
     name: string;
     placeholder?: string;
     isClearable?: boolean;
+    minDate?: string;
+    maxDate?: string;
 };
 
-export function DatePicker({ name, placeholder = "Select date", isClearable }: DatePickerProps) {
+export function DatePicker({ name, placeholder = "Select date", isClearable, minDate, maxDate }: DatePickerProps) {
     const [open, setOpen] = useState(false);
     const [view, setView] = useState<"date" | "month" | "year">("date");
     const [current, setCurrent] = useState(dayjs());
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    const min = minDate ? dayjs(minDate) : null;
+    const max = maxDate ? dayjs(maxDate) : null;
+
 
     useOutsideClick(dropdownRef, () => setOpen(false), open);
 
@@ -170,6 +176,11 @@ export function DatePicker({ name, placeholder = "Select date", isClearable }: D
 
                                             {Array.from({ length: daysInMonth }).map((_, i) => {
                                                 const d = i + 1;
+                                                const dateObj = current.date(d);
+                                                const isDisabled =
+                                                    (min && dateObj.isBefore(min, "day")) ||
+                                                    (max && dateObj.isAfter(max, "day"));
+
                                                 const isSelected = selected && selected.isSame(current.date(d), "day");
                                                 const today = dayjs();
                                                 const isToday = today.isSame(current.date(d), "day");
@@ -177,12 +188,13 @@ export function DatePicker({ name, placeholder = "Select date", isClearable }: D
                                                 return (
                                                     <div
                                                         key={d}
-                                                        onClick={() => handleSelect(current.date(d))}
+                                                        onClick={() => !isDisabled && handleSelect(dateObj)}
                                                         className={`cursor-pointer p-2 rounded-full text-sm
-                                ${isSelected ? "bg-blue-500 text-white" : "hover:bg-blue-50"}
-                                ${!isSelected && isToday ? "border border-blue-500 font-semibold text-blue-600" : ""}
-                                ${!isSelected && !isToday ? "hover:bg-blue-50" : ""}
-                            `}
+                                                                ${isDisabled ? "text-gray-300 cursor-not-allowed" : ""}
+                                                                ${isSelected ? "bg-blue-500 text-white" : "hover:bg-blue-50"}
+                                                                ${!isSelected && isToday ? "border border-blue-500 font-semibold text-blue-600" : ""}
+                                                                ${!isSelected && !isDisabled && !isToday ? "hover:bg-blue-50" : ""}
+                                                            `}
                                                     >
                                                         {d}
                                                     </div>
