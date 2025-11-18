@@ -49,8 +49,6 @@ export default function UserTable() {
         setParams((prev) => ({ ...prev, page: pageNum }));
     };
 
-    if (!data) return null;
-
     return (
         <>
             <UserDeleteModal
@@ -176,10 +174,10 @@ export default function UserTable() {
                         {start} – {end} of {totalItems} entries
                     </p>
 
-                    {data?.pagination.total_pages > 1 && (
+                    {(data?.pagination?.total_pages ?? 0) > 1 && (
                         <Pagination
                             page={currentPage}
-                            total={data?.pagination.total_pages || 1}
+                            total={data?.pagination?.total_pages || 1}
                             onPageChange={goToPage}
                             handleChangePage={handleChangePage}
                         />)}
