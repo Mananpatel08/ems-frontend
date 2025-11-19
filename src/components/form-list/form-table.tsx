@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Search } from "lucide-react";
-import { Calendar, ChevronDown, Edit, Trash } from "lucide-react";
+import { Calendar, ChevronDown, Eye, Trash } from "lucide-react";
 import { Input } from "../ui";
 import { useGetForms } from "@/hooks/useForm";
 import { Avatar } from "../ui/avatar";
@@ -10,8 +10,10 @@ import { formatDate } from "@/helpers/date";
 import { useDebounce } from "use-debounce";
 import { Pagination } from "../ui/pagination";
 import { FilterDropdown } from "../user-list/filter-dropdown";
+import { useRouter } from "next/navigation";
 
 export default function FormTable() {
+  const router = useRouter();
   const [params, setParams] = useState({
     page: 1,
     search: "",
@@ -126,8 +128,11 @@ export default function FormTable() {
                       {formatDate(form.completed_at ?? "")}
                     </td>
                     <td className="py-3 px-5 flex gap-3">
-                      <button className="p-2 rounded-lg border border-gray-300 hover:bg-gray-200">
-                        <Edit className="w-4 h-4" />
+                      <button
+                        onClick={() => router.push(`/forms/${form.id}`)}
+                        className="p-2 rounded-lg border border-gray-300 hover:bg-gray-200"
+                      >
+                        <Eye className="w-4 h-4" />
                       </button>
                       <button className="p-2 rounded-lg border border-gray-300 hover:bg-gray-200">
                         <Trash className="w-4 h-4" />

@@ -3,6 +3,12 @@ import "../style/globals.css";
 import "nprogress/nprogress.css";
 import NProgressWrapper from "./NProgressWrapper";
 import { QueryProvider, ToastProviderWrapper, UserProviderWrapper, DashBoardPrividerWrapper } from "@/providers";
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: "Login | EMS",
@@ -15,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.className}>
       <head>
         <meta
           name="viewport"
