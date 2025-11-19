@@ -21,3 +21,17 @@ export const POST_OPTIONS = [
 ]
 
 export const EXAM_TYPES = ["pre_service", "ccc", "ccc_plus", "lrq", "hrq"] as const;
+
+export const canSubmit = (
+    currentStep: number,
+    completedSteps: any[]
+  ): boolean => {
+    // Every step from 1 → currentStep-1 must be completed
+    for (let i = 1; i < currentStep; i++) {
+      if (!completedSteps.includes(i)) {
+        return false;
+      }
+    }
+    return true;
+  };
+  

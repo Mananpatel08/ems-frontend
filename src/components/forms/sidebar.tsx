@@ -2,79 +2,157 @@
 
 import React from "react";
 import {
-  CheckCircleIcon,
-  MinusIcon,
+  CheckIcon,
+  UserIcon,
+  Cog8ToothIcon,
+  ShieldCheckIcon,
 } from "@heroicons/react/24/solid";
-import { CircleStackIcon } from "@heroicons/react/24/outline";
-import { set } from "react-hook-form";
 
-const steps = [
-  "Personal information",
-  "Service details",
+interface StepItem {
+  title: string;
+  desc: string;
+  icon: React.ReactNode;
+}
+
+const stepData: StepItem[] = [
+  {
+    title: "Personal Information",
+    desc: "Step details here",
+    icon: <UserIcon className="w-5 h-5" />,
+  },
+  {
+    title: "Service Details",
+    desc: "Step details here",
+    icon: <Cog8ToothIcon className="w-5 h-5" />,
+  },
+  {
+    title: "Confirmation",
+    desc: "Step details here",
+    icon: <ShieldCheckIcon className="w-5 h-5" />,
+  },
 ];
 
 interface FormSidebarProps {
-  currentStep?: number;
-  setStep: React.Dispatch<React.SetStateAction<number>>;
+  currentStep: number;
+  setStep: (step: number) => void;
+  stepCompleted: any[];
 }
+export const FormSidebar: React.FC<FormSidebarProps> = ({
+  currentStep,
+  setStep,
+  stepCompleted,
+}) => {
+  const hasSkippedSteps = stepData.some((_, i) => {
+    return i + 1 < currentStep && !stepCompleted.includes(i + 1);
+  });
 
-export const FormSidebar: React.FC<FormSidebarProps> = ({ currentStep = 1, setStep }) => {
   return (
-    <aside className="flex md:flex-col items-start">
-      <div className="w-full">
-        {steps.map((step, index) => {
-          const isCompleted = index + 1 < currentStep;
-          const isActive = index + 1 === currentStep;
+    <div className="space-y-3">
+
+      {/* MOBILE STEP VIEW */}
+      <ol className="flex md:hidden items-center justify-between gap-4 px-3 py-4 relative">
+        {stepData.map((step, index) => {
+          const isActive = currentStep === index + 1;
+          const isCompleted = stepCompleted.includes(index + 1);
+          const isSkipped =
+            index + 1 < currentStep && !isCompleted;
 
           return (
-            <div
-              key={step}
+            <li key={index} className="relative flex flex-col items-center cursor-pointer w-full"
               onClick={() => setStep(index + 1)}
-              className="flex items-start space-x-5 cursor-pointer">
-              <div className="relative flex flex-col items-center">
-                {/* Step circle */}
-                <div
-                  className={`flex items-center justify-center w-6 h-6 rounded-full border-2
-                    ${isCompleted
-                      ? "bg-blue-500 border-blue-500 text-white"
-                      : isActive
-                        ? "border-blue-500 text-blue-500 bg-white"
-                        : "border-gray-300 bg-white text-gray-400"
-                    }`}
-                >
-                  {isCompleted ? (
-                    <CheckCircleIcon className="w-5 h-5 text-white" />
-                  ) : isActive ? (
-                    <MinusIcon className="w-3 h-3 text-blue-500" />
-                  ) : (
-                    <div className="w-2 h-2 rounded-full bg-gray-300" />
-                  )}
-                </div>
+            >
+              {/* line */}
+              {index !== 0 && (
+                <span
+                  className={`absolute top-5 left-0 -translate-x-1/2 h-1 w-full
+                    ${
+                      isCompleted || isActive
+                        ? "bg-blue-500"
+                        : isSkipped
+                        ? "bg-red-500"
+                        : "bg-gray-300"
+                    }
+                  `}
+                ></span>
+              )}
 
-                {/* Line connector */}
-                {index < steps.length - 1 && (
-                  <div
-                    className={`h-6 w-0.5 ${isCompleted ? "bg-blue-500" : "bg-gray-300"
-                      }`}
-                  ></div>
-                )}
+              {/* Circle */}
+              <div
+                className={`z-10 flex items-center justify-center w-8 h-8 rounded-full ring-4 ring-white
+                  ${
+                    isCompleted
+                      ? "bg-green-500 text-white "
+                      : isSkipped
+                      ? "bg-red-500 text-white "
+                      : isActive
+                      ? "bg-blue-500 text-white "
+                      : "bg-gray-200 text-gray-500 "
+                  }
+                `}
+              >
+                {isCompleted ? <CheckIcon className="w-5 h-5" /> : step.icon}
               </div>
 
-              {/* Step label */}
-              <span
-                className={`text-sm mt-1 ${isCompleted
-                    ? "text-gray-700 font-medium"
-                    : isActive
-                      ? "text-blue-600 font-semibold"
-                      : "text-gray-500"
-                  }`}
-              >
-                {step}
-              </span>
-            </div>
+              <div className={`mt-1 text-xs font-medium text-center
+                ${isSkipped ? "text-red-600" : ""}
+              `}>
+                {step.title}
+              </div>
+            </li>
           );
         })}
-      </div>
-    </aside>
+      </ol>
+
+      {/* DESKTOP VIEW */}
+      <ol className="hidden md:block relative border-s border-gray-300">
+        {stepData.map((step, index) => {
+          const isActive = currentStep === index + 1;
+          const isCompleted = stepCompleted.includes(index + 1);
+          const isSkipped =
+            index + 1 < currentStep && !isCompleted;
+
+          return (
+            <li key={index} onClick={() => setStep(index + 1)} className="mb-10 ms-8 cursor-pointer">
+              <span
+                className={`absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 ring-4 ring-white
+                  ${
+                    isCompleted
+                      ? "bg-green-500 text-white "
+                      : isSkipped
+                      ? "bg-red-500 text-white "
+                      : isActive
+                      ? "bg-blue-500 text-white "
+                      : "bg-gray-200 text-gray-500 "
+                  }
+                `}
+              >
+                {isCompleted ? <CheckIcon className="w-5 h-5" /> : step.icon}
+              </span>
+
+              <h3
+                className={`font-semibold leading-tight ${
+                  isSkipped
+                    ? "text-red-600"
+                    : isActive
+                    ? "text-blue-600"
+                    : "text-gray-700"
+                }`}
+              >
+                {step.title}
+              </h3>
+
+              <p className="text-sm text-gray-500">{step.desc}</p>
+            </li>
+          );
+        })}
+      </ol>
+
+      {/* WARNING MESSAGE */}
+      {/* {hasSkippedSteps && (
+        <p className="text-red-600 text-sm font-medium">
+          Previous step information is pending.
+        </p>
+      )} */}
+    </div>
   );
 };
