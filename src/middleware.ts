@@ -9,7 +9,7 @@ const protectedRoutes: Record<string, string[]> = {
   "/forms": ["SUPER_ADMIN"],
   "/users": ["SUPER_ADMIN"],
   "/profile": ["SUPER_ADMIN", "USER"],
-  "/form": ["USER"],
+  "/form": ["SUPER_ADMIN", "USER"],
 };
 
 export function middleware(request: NextRequest) {

@@ -96,14 +96,14 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({
     if (personalDetails?.gender) setGender(personalDetails.gender);
   }, [personalDetails]);
   return (
-    <div className="w-5/6 me-auto">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-8">
+    <div className="w-full sm:w-5/6  px-3 sm:px-auto">
+      <h2 className="text-2xl font-semibold text-gray-800 mb-8 hidden sm:block">
         Personal Information
       </h2>
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
-          className="space-y-8 px-6"
+          className="space-y-8"
         >
           {/* ====== Name ====== */}
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 items-start gap-6">
@@ -168,10 +168,10 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({
           </div>
 
           {/* ====== Mobile Number ====== */}
-          <div className="grid grid-cols-3 items-start gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 items-start gap-1 sm:gap-6">
             <div>
               <label className="text-gray-700 font-medium">Mobile Number</label>
-              <p className="text-gray-400 text-sm">Enter valid phone number</p>
+              <p className="text-gray-400 text-sm hidden sm:block">Enter valid phone number</p>
             </div>
 
             <div className="col-span-2 relative w-full">
@@ -185,10 +185,10 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({
           </div>
 
           {/* ====== PAN Number ====== */}
-          <div className="grid grid-cols-3 items-start gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 items-start gap-1 sm:gap-6">
             <div>
               <label className="text-gray-700 font-medium">PAN Number</label>
-              <p className="text-gray-400 text-sm">Enter your PAN ID</p>
+              <p className="text-gray-400 text-sm hidden sm:block">Enter your PAN ID</p>
             </div>
 
             <div className="col-span-2 relative w-full">
@@ -202,12 +202,12 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({
           </div>
 
           {/* ====== Voter Card Number ====== */}
-          <div className="grid grid-cols-3 items-start gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 items-start gap-1 sm:gap-6">
             <div>
               <label className="text-gray-700 font-medium">
                 Voter Card Number
               </label>
-              <p className="text-gray-400 text-sm">
+              <p className="text-gray-400 text-sm hidden sm:block">
                 As printed on your voter ID
               </p>
             </div>
@@ -223,10 +223,10 @@ export const PersonalDetails: React.FC<PersonalDetailProps> = ({
           </div>
 
           {/* ====== Email ====== */}
-          <div className="grid grid-cols-3 items-start gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 items-start gap-1 sm:gap-6">
             <div>
               <label className="text-gray-700 font-medium">Email ID</label>
-              <p className="text-gray-400 text-sm">Enter your valid email</p>
+              <p className="text-gray-400 text-sm hidden sm:block">Enter your valid email</p>
             </div>
 
             <div className="col-span-2 relative w-full">

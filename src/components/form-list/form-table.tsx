@@ -11,9 +11,11 @@ import { useDebounce } from "use-debounce";
 import { Pagination } from "../ui/pagination";
 import { FilterDropdown } from "../user-list/filter-dropdown";
 import { useRouter } from "next/navigation";
+import { FormDeleteModal } from "./form-delete-modal";
 
 export default function FormTable() {
   const router = useRouter();
+  const [deleteForm, setDeleteForm] = useState<any>();
   const [params, setParams] = useState({
     page: 1,
     search: "",
@@ -45,39 +47,45 @@ export default function FormTable() {
   };
 
   return (
-    <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-200">
-      {/* Search & Filters */}
-      <div className="flex items-center justify-between p-5">
-        {/* Search Box */}
-        <div className="w-1/4">
-          <Input
-            name="search"
-            type="text"
-            placeholder="Search..."
-            className="focus:border-gray-300"
-            icon={<Search className="h-5 w-5" />}
-          />
+    <>
+      <FormDeleteModal
+        data={deleteForm}
+        isOpen={!!deleteForm}
+        onClose={() => setDeleteForm(undefined)}
+      />
+      <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-200">
+        {/* Search & Filters */}
+        <div className="flex items-center justify-between p-5">
+          {/* Search Box */}
+          <div className="w-1/4">
+            <Input
+              name="search"
+              type="text"
+              placeholder="Search..."
+              className="focus:border-gray-300"
+              icon={<Search className="h-5 w-5" />}
+            />
+          </div>
+
+          <FilterDropdown setParams={setParams} params={params} />
         </div>
 
-        <FilterDropdown setParams={setParams} params={params} />
-      </div>
+        {/* Table */}
+        <div className="overflow-auto">
+          <table className="w-full text-left">
+            <thead className="bg-gray-100 text-gray-600 text-sm">
+              <tr>
+                <th className="py-3 px-5 font-normal">FORM ID</th>
+                <th className="py-3 px-5 font-normal">CURRENT STEP</th>
+                <th className="py-3 px-5 font-normal">COMPLETED DATE</th>
+                <th className="py-3 px-5 font-normal">STATUS</th>
+                <th className="py-3 px-5 font-normal">ACTION</th>
+              </tr>
+            </thead>
 
-      {/* Table */}
-      <div className="overflow-auto">
-        <table className="w-full text-left">
-          <thead className="bg-gray-100 text-gray-600 text-sm">
-            <tr>
-              <th className="py-3 px-5 font-normal">FORM ID</th>
-              <th className="py-3 px-5 font-normal">STATUS</th>
-              <th className="py-3 px-5 font-normal">CURRENT STEP</th>
-              <th className="py-3 px-5 font-normal">COMPLETED DATE</th>
-              <th className="py-3 px-5 font-normal">ACTION</th>
-            </tr>
-          </thead>
-
-          <tbody className="text-sm ">
-            {isLoading
-              ? Array(10)
+            <tbody className="text-sm ">
+              {isLoading
+                ? Array(10)
                   .fill(0)
                   .map((_, i) => (
                     <tr
@@ -106,26 +114,44 @@ export default function FormTable() {
                       </td>
                     </tr>
                   ))
-              : forms?.map((form) => (
+                : forms?.map((form) => (
                   <tr
                     key={form.id}
-                    className="border-b border-gray-100 bg-white hover:bg-gray-50"
+                    onClick={() => router.push(`/forms/${form.id}`)}
+                    className="border-b border-gray-100 bg-white hover:bg-gray-50 cursor-pointer"
                   >
                     <td className="py-3 px-5">
                       {form.form_number}
                       {/* <div className="flex items-center gap-2">
-                                        <Avatar
-                                            name={user.first_name}
-                                            size={30}
-                                            shape="circle"
-                                        />
-                                        {user.first_name}
-                                    </div> */}
+                                          <Avatar
+                                              name={user.first_name}
+                                              size={30}
+                                              shape="circle"
+                                          />
+                                          {user.first_name}
+                                      </div> */}
                     </td>
-                    <td className="py-3 px-5">{form.status}</td>
+
                     <td className="py-3 px-5">{form.current_step}</td>
                     <td className="py-3 px-5">
                       {formatDate(form.completed_at ?? "")}
+                    </td>
+                    <td className="py-3 px-5">
+                      <div>
+                        {form.status === 'completed' ? (
+                          <span className="px-3 py-1 rounded-lg text-sm bg-green-200/50 text-green-800 border border-green-800">
+                            Completed
+                          </span>
+                        ) : form.status === 'in_progress' ? (
+                          <span className="px-3 py-1 rounded-lg text-sm bg-yellow-100/50 text-yellow-600 border border-yellow-600">
+                            In Progress
+                          </span>
+                        ) : (
+                          <span className="px-3 py-1 rounded-lg text-sm bg-gray-100/50 text-gray-600 border border-gray-600">
+                            Not Started
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="py-3 px-5 flex gap-3">
                       <button
@@ -134,30 +160,37 @@ export default function FormTable() {
                       >
                         <Eye className="w-4 h-4" />
                       </button>
-                      <button className="p-2 rounded-lg border border-gray-300 hover:bg-gray-200">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDeleteForm(form);
+                        }}
+                        className="p-2 rounded-lg border border-gray-300 hover:bg-gray-200"
+                      >
                         <Trash className="w-4 h-4" />
                       </button>
                     </td>
                   </tr>
                 ))}
-          </tbody>
-        </table>
-      </div>
+            </tbody>
+          </table>
+        </div>
 
-      <div className="flex items-center justify-between p-5 py-3">
-        <p className="text-sm text-gray-600">
-          {start} – {end} of {totalItems} entries
-        </p>
+        <div className="flex items-center justify-between p-5 py-3">
+          <p className="text-sm text-gray-600">
+            {start} – {end} of {totalItems} entries
+          </p>
 
-        {(data?.pagination?.total_pages ?? 0) > 1 && (
-          <Pagination
-            page={currentPage}
-            total={data?.pagination?.total_pages || 1}
-            onPageChange={goToPage}
-            handleChangePage={handleChangePage}
-          />
-        )}
+          {(data?.pagination?.total_pages ?? 0) > 1 && (
+            <Pagination
+              page={currentPage}
+              total={data?.pagination?.total_pages || 1}
+              onPageChange={goToPage}
+              handleChangePage={handleChangePage}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

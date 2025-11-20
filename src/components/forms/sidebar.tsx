@@ -49,8 +49,7 @@ export const FormSidebar: React.FC<FormSidebarProps> = ({
   return (
     <div className="space-y-3">
 
-      {/* MOBILE STEP VIEW */}
-      <ol className="flex md:hidden items-center justify-between gap-4 px-3 py-4 relative">
+      <ol className="flex items-center justify-between gap-4 px-3 py-4 relative">
         {stepData.map((step, index) => {
           const isActive = currentStep === index + 1;
           const isCompleted = stepCompleted.includes(index + 1);
@@ -64,7 +63,7 @@ export const FormSidebar: React.FC<FormSidebarProps> = ({
               {/* line */}
               {index !== 0 && (
                 <span
-                  className={`absolute top-5 left-0 -translate-x-1/2 h-1 w-full
+                  className={`absolute top-4 left-0 -translate-x-1/2 h-1 w-full
                     ${
                       isCompleted || isActive
                         ? "bg-blue-500"
@@ -93,7 +92,7 @@ export const FormSidebar: React.FC<FormSidebarProps> = ({
                 {isCompleted ? <CheckIcon className="w-5 h-5" /> : step.icon}
               </div>
 
-              <div className={`mt-1 text-xs font-medium text-center
+              <div className={`mt-1 text-xs block sm:hidden font-medium text-center
                 ${isSkipped ? "text-red-600" : ""}
               `}>
                 {step.title}
@@ -104,7 +103,7 @@ export const FormSidebar: React.FC<FormSidebarProps> = ({
       </ol>
 
       {/* DESKTOP VIEW */}
-      <ol className="hidden md:block relative border-s border-gray-300">
+      {/* <ol className="hidden md:block relative border-s border-gray-300">
         {stepData.map((step, index) => {
           const isActive = currentStep === index + 1;
           const isCompleted = stepCompleted.includes(index + 1);
@@ -145,7 +144,7 @@ export const FormSidebar: React.FC<FormSidebarProps> = ({
             </li>
           );
         })}
-      </ol>
+      </ol> */}
 
       {/* WARNING MESSAGE */}
       {/* {hasSkippedSteps && (

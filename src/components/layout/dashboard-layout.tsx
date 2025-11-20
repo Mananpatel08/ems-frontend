@@ -33,7 +33,7 @@ export const DashboardLayout = ({
                 >
                     {!isProfile && (<DashboardHeader />)}
                     <main className={`main-panel overflow-auto h-[calc(100%-70px)] custom-scrollbar`}>
-                        <div className='w-full h-full'>
+                        <div className='w-full'>
                             {children}
                         </div>
                     </main>

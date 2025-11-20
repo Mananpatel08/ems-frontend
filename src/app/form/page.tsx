@@ -1,4 +1,5 @@
-import EmployeeForm from '@/components/forms/root'
+
+import { EmployeeForm } from '@/components/forms'
 import React from 'react'
 
 const Form = () => {

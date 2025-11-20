@@ -97,14 +97,14 @@ export const ServiceDetail: React.FC<ServiceDetailProps> = ({
   };
 
   return (
-    <div className="w-5/6 pe-auto ">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-8">
+    <div className="w-full sm:w-5/6 px-auto px-3 sm:px-auto">
+      <h2 className="text-2xl font-semibold text-gray-800 mb-8 hidden sm:block">
         Service Details
       </h2>
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
-          className="space-y-8 px-6"
+          className="space-y-8"
         >
           {/* ====== Joining / Appointment ====== */}
           <div className="grid grid-cols-3 items-start gap-6">

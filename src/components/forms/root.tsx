@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { FormHeader } from "./header";
 import { FormSidebar } from "./sidebar";
 import { PersonalDetails, ServiceDetail } from "./detail-forms";
@@ -12,8 +12,12 @@ import { usePersistentStep } from "@/helpers/localStorage";
 import { canSubmit } from "@/helpers/form";
 import { ConfirmationStep } from "./detail-forms/Confirmation-step";
 
-export default function EmployeeForm() {
-  const [formId, setFormId] = useState("");
+type Props = {
+  propFormId?: string;
+  isDashboard?: boolean;
+};
+export const EmployeeForm: FC<Props> = ({ propFormId, isDashboard }) => {
+  const [formId, setFormId] = useState(propFormId || "");
   const { data: formData, isLoading, refetch } = useFormById(formId);
   const { user, isLoadingCurrentUser } = useUserContext();
   const currentStep = formData?.current_step || 1;
@@ -27,7 +31,8 @@ export default function EmployeeForm() {
   const serviceDetailsData = formData?.service_details;
 
   useEffect(() => {
-    if (user) {
+    if (propFormId) return;
+    if (user?.form_id) {
       const id = user.form_id;
       setFormId(id);
     }
@@ -41,15 +46,15 @@ export default function EmployeeForm() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <FormHeader />
+      {(!isDashboard && <FormHeader />)}
       <div className="flex justify-center max-h-[calc(100vh-100px)] overflow-y-auto scrollbar-medium">
-        <div className="flex flex-col lg:flex-row gap-12 p-12">
+        <div className="flex flex-col gap-4 p-4">
           <FormSidebar
             currentStep={step}
             setStep={setStep}
             stepCompleted={stepCompleted}
           />
-          <div className="flex-1 min-w-[64rem] max-w-5xl ">
+          <div className="flex justify-center max-w-5xl">
             {step === 1 &&
               (isLoading ? (
                 <PersonalDetailSkeleton />
